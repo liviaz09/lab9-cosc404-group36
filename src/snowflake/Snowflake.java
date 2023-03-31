@@ -47,9 +47,9 @@ public class Snowflake {
 	 */
 	public Connection connect() throws SQLException {
 		// TODO: Fill in your url, user id, and password
-		String url = "jdbc:snowflake://yourserverinfo.com";
-		String uid = "";
-		String pw = "";
+		String url = "jdbc:snowflake://mlgocnt-qv00144.snowflakecomputing.com";
+		String uid = "SUNVAT";
+		String pw = "Sunvat1@UBC";
 
 		System.out.println("Connecting to database.");
 		con = DriverManager.getConnection(url, uid, pw);
@@ -94,8 +94,15 @@ public class Snowflake {
 	 * Also return totalOrderValue which adds up all of the order totals (o_totalprice).
 	 */
 	public ResultSet query1() throws SQLException {				
-		// TODO: Write query
-		return null;		
+		Statement stmt = con.createStatement();
+		
+		return stmt.executeQuery("SELECT cust.CUSTOMERNAME , "
+		+"COUNT (DISTINCT  od.ORDERID) AS numOrders, "
+		+" SUM(ORDEREDPRODUCT.QUANTITY * PRODUCT.LISTPRICE) AS totalOrderValue "
+		+"FROM CUSTOMER cust INNER JOIN ORDERS od ON cust.CUSTOMERID = od.CUSTOMERID "
+		+"INNER JOIN ORDEREDPRODUCT ON od.ORDERID = ORDEREDPRODUCT.ORDERID INNER JOIN  PRODUCT ON ORDEREDPRODUCT.PRODUCTID = PRODUCT.PRODUCTID"
+		+" WHERE PRODUCT.LISTPRICE BETWEEN 0.5 AND 100 AND cust.CUSTOMERNAME LIKE '%e%' GROUP BY cust.CUSTOMERNAME "
+		+"ORDER BY totalOrderValue DESC LIMIT 5;");		
 	}
 
 
