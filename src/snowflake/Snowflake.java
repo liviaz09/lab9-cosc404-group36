@@ -96,7 +96,12 @@ public class Snowflake {
 	public ResultSet query1() throws SQLException {				
 		Statement stmt = con.createStatement();
 		
-		return null;	
+		return stmt.executeQuery("SELECT nat.N_NAME, od.O_ORDERPRIORITY, COUNT(*) AS numOrders, "
+		+"SUM (od.O_TOTALPRICE) AS totalOrderValue FROM SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.ORDERS od JOIN "
+		+"SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.CUSTOMER cust ON od.O_CUSTKEY = cust.C_CUSTKEY JOIN "
+		+" SNOWFLAKE_SAMPLE_DATA.TPCH_SF1.NATION nat ON cust.C_NATIONKEY = nat.N_NATIONKEY WHERE "
+		+"cust.C_ACCTBAL > 1000 AND od.O_ORDERPRIORITY IN ('1-URGENT', '2-HIGH', '3-MEDIUM') GROUP BY nat.N_NAME, od.O_ORDERPRIORITY " 
+		+"ORDER BY numOrders DESC LIMIT 10;");	
 	}
 
 
