@@ -96,13 +96,7 @@ public class Snowflake {
 	public ResultSet query1() throws SQLException {				
 		Statement stmt = con.createStatement();
 		
-		return stmt.executeQuery("SELECT cust.CUSTOMERNAME , "
-		+"COUNT (DISTINCT  od.ORDERID) AS numOrders, "
-		+" SUM(ORDEREDPRODUCT.QUANTITY * PRODUCT.LISTPRICE) AS totalOrderValue "
-		+"FROM LAB.PUBLIC.CUSTOMER cust INNER JOIN LAB.PUBLIC.ORDERS od ON cust.CUSTOMERID = od.CUSTOMERID "
-		+"INNER JOIN LAB.PUBLIC.ORDEREDPRODUCT ON od.ORDERID = ORDEREDPRODUCT.ORDERID INNER JOIN  LAB.PUBLIC.PRODUCT ON ORDEREDPRODUCT.PRODUCTID = PRODUCT.PRODUCTID"
-		+" WHERE PRODUCT.LISTPRICE BETWEEN 0.5 AND 100 AND cust.CUSTOMERNAME LIKE '%e%' GROUP BY cust.CUSTOMERNAME "
-		+"ORDER BY totalOrderValue DESC LIMIT 5;");		
+		return null;	
 	}
 
 
@@ -119,8 +113,15 @@ public class Snowflake {
 	 * NOTE: Answering this query requires the data in the CSV files to have been loaded into Snowflake.
 	 */
 	public ResultSet query2() throws SQLException {
-		// TODO: Write query
-		return null;		
+		Statement stmt = con.createStatement();
+		
+		return stmt.executeQuery("SELECT cust.CUSTOMERNAME , "
+		+"COUNT (DISTINCT  od.ORDERID) AS numOrders, "
+		+" SUM(ORDEREDPRODUCT.QUANTITY * PRODUCT.LISTPRICE) AS totalOrderValue "
+		+"FROM LAB.PUBLIC.CUSTOMER cust INNER JOIN LAB.PUBLIC.ORDERS od ON cust.CUSTOMERID = od.CUSTOMERID "
+		+"INNER JOIN LAB.PUBLIC.ORDEREDPRODUCT ON od.ORDERID = ORDEREDPRODUCT.ORDERID INNER JOIN  LAB.PUBLIC.PRODUCT ON ORDEREDPRODUCT.PRODUCTID = PRODUCT.PRODUCTID"
+		+" WHERE PRODUCT.LISTPRICE BETWEEN 0.5 AND 100 AND cust.CUSTOMERNAME LIKE '%e%' GROUP BY cust.CUSTOMERNAME "
+		+"ORDER BY totalOrderValue DESC LIMIT 5;");		
 	}
 	
 	/**
